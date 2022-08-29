@@ -1,0 +1,23 @@
+MySQL
+데이터베이스 -> 테이블 -> 데이터
+
+데이터베이스 종류
+1. 관계형 데이터베이스 (v)
+    - MySQL(v), Oracle, MariaBD, ....
+2. 비관계형 데이터베이스(NoSQL) - 데이터분석용
+3. 시계열 데이터베이스 - 데이터분석용
+4. 빅데이터
+
+- SQL
+DML(not auto commit) : 최종저장개념이 아님, 되살리기 기능이 있음
+		 select, update, delete, insert
+*디비버, 워크벤치 프로그램은
+ DML이 오토커밋으로 설정되어 있어,
+ 해제하고 작업해야함.
+ (****dbeaver auto commit 해제)
+
+DDL(auto commit) : 저장, 되살리기 기능 없음
+		create, alter, drop
+
+DCL(auto commit) : 저장. 되살리기 기능 없음
+		grant, revoke
