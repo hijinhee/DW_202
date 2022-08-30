@@ -1,0 +1,71 @@
+-- 08.30(화)
+-- group by : 특정 컬럼을 그룹핑 하는 SQL 문법
+-- SQL 읽는 순서 : from -> where -> group by -> having -> select -> order by
+-- job 별로 group by하기
+-- group by할 컬럼을 select에도 써주자!
+select job as '직책 그룹핑' from emp group by job
+-- 입사 날짜로 group by
+select hiredate as '입사날짜 그룹핑' from emp group by hiredate
+-- 년도별로 입사 날짜를 group by
+-- date_format() SQL 내장 함수, 날짜를 원하는대로 포멧팅 해줌.
+-- %Y: year(년도), %M : month(월), %d : day(일)
+select date_format(hiredate,'%Y'), count(empno) as '사원수' from emp group by date_format(HIREDATE,'%Y')
+-- 문제, 부서별로 그룹핑하고 부서인원 수도 출력하시오.
+select deptno, count(empno) as '부서인원 수' from emp group by deptno
+-- 20번 부서를 제외한 나머지 부서 그룹핑!
+select deptno from emp where deptno != 20 group by deptno
+-- having : group by된 결과를 필터링 할 때 사용
+-- where : 필터링
+-- where 조걱 안 쓰고 having 으로 쓰기
+-- having 과 where 차이점
+-- 1. SQL 실행 순서가 다르다.
+-- 2. where 조건에 집계함수(count, max, min, avg..)으로 비교 불가능
+-- 3. having은 집계함수 비교 가능
+select deptno, count(empno) from emp group by deptno having count(empno) >= 4
+-- group by된 결과를 필터링하고 싶을 때 사용
+-- 문제1. 부서별로 급여 합계를 그룹핑 하시오.(hint: sum)
+select deptno, sum(sal) from emp group by deptno  
+-- 문제2. 문제 1번에서 급여합계가 5000이상인 부서만 조회
+select deptno, sum(sal) from emp group by deptno having sum(sal)>=5000
+-- 문제3. 문제 2번에서 10번 30번 부서 제외
+select deptno from emp where deptno =20 group by deptno having sum(sal)>=5000
+-- 문제4. 입사날짜를 월별로 그룹핑하고 월별 입사자 수를 출력하시오.
+select date_format(hiredate,'%m') as '입사 월', count(empno) as '입사 사원수' from emp group by date_format(hiredate,'%m') 
+-- 문제5. 직책별로 그룹핑하고 직책별 평균 급여를 조회하고, 평균 급여가 1000이 넘는 직책만 출력하시오.
+-- 		(단, 직책이 manager는 제외)
+select job, avg(sal) from emp where job != 'manager' group by job having avg(sal) > 1000 
+-- 문제6. 1982년도에 입사한 모든 사원의 정보 조회 (이렇게 쓰는게 맞는건지..잘 모르겠다. 틀림-나는 1982년부터 입사한 사람들이 다 출력됨..ㅜㅜ)
+select * from emp where hiredate >= '1982-01-01'
+-- 답 
+select * from emp where date_format(hiredate, '%Y') = '1982'
+-- 문제7. 급여가 1500 ~ 2850 사이의 범위에 속하는 사원 이름, 급여, 직책 조회
+select ename, sal, job from emp where sal >= 1500 and sal<=2850
+
+-- order by : 특정 컬럼을 정렬할 때 사용(항상 마지막에 사용됨)
+-- 아래 쿼리는 오름차순(디폴트 값)
+select ename, sal from emp order by sal 
+-- 아래 쿼리는 내림차순
+select ename, sal from emp order by sal desc
+-- 컬럼 위치로 정렬하기.
+-- order by는 항상 마지막에 실행되기 때문에 select 컬럼 순서를 알고 있다.
+select ename, sal from emp order by 2 desc
+
+-- 총정리
+select deptno, count(empno) -- 5
+from emp  -- 1
+where deptno !=10 -- 2 
+group by deptno  -- 3
+having count(empno) >=3 -- 4
+order by count(empno) desc -- 6
+
+## delete, update, insert
+-- delete (데이터 삭제)(한줄 삭제)
+-- 삭제할 때는 where 조건으로 삭제하자
+delete from emp where 
+
+-- truncate 테이블 안에 있는 데이터를 초기화 시킴.(통으로 날림)
+truncate table emp  
+
+-- auto commit을 해제하면 rollback(뒤 돌아가기)으로 돌아갈 수 있음.
+-- auto commit이 설정되어 있으면 rollback 명령어 불가능!
+-- commit(완전 저장), rollback(이전 상태로 돌아가기)
