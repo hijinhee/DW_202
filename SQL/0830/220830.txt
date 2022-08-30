@@ -7,7 +7,7 @@ select job as '직책 그룹핑' from emp group by job
 -- 입사 날짜로 group by
 select hiredate as '입사날짜 그룹핑' from emp group by hiredate
 -- 년도별로 입사 날짜를 group by
--- date_format() SQL 내장 함수, 날짜를 원하는대로 포멧팅 해줌.
+-- date_format(): SQL 내장 함수, 날짜를 원하는대로 포멧팅 해줌.
 -- %Y: year(년도), %M : month(월), %d : day(일)
 select date_format(hiredate,'%Y'), count(empno) as '사원수' from emp group by date_format(HIREDATE,'%Y')
 -- 문제, 부서별로 그룹핑하고 부서인원 수도 출력하시오.
@@ -16,7 +16,7 @@ select deptno, count(empno) as '부서인원 수' from emp group by deptno
 select deptno from emp where deptno != 20 group by deptno
 -- having : group by된 결과를 필터링 할 때 사용
 -- where : 필터링
--- where 조걱 안 쓰고 having 으로 쓰기
+-- where 조건 안 쓰고 having 으로 쓰기
 -- having 과 where 차이점
 -- 1. SQL 실행 순서가 다르다.
 -- 2. where 조건에 집계함수(count, max, min, avg..)으로 비교 불가능
@@ -27,8 +27,9 @@ select deptno, count(empno) from emp group by deptno having count(empno) >= 4
 select deptno, sum(sal) from emp group by deptno  
 -- 문제2. 문제 1번에서 급여합계가 5000이상인 부서만 조회
 select deptno, sum(sal) from emp group by deptno having sum(sal)>=5000
--- 문제3. 문제 2번에서 10번 30번 부서 제외
+-- 문제3. 문제 2번에서 10번 30번 부서 제외 (****and, or 신경 쓸것!!****)
 select deptno from emp where deptno =20 group by deptno having sum(sal)>=5000
+select deptno from emp where deptno !=10 and deptno !=30 group by deptno
 -- 문제4. 입사날짜를 월별로 그룹핑하고 월별 입사자 수를 출력하시오.
 select date_format(hiredate,'%m') as '입사 월', count(empno) as '입사 사원수' from emp group by date_format(hiredate,'%m') 
 -- 문제5. 직책별로 그룹핑하고 직책별 평균 급여를 조회하고, 평균 급여가 1000이 넘는 직책만 출력하시오.
@@ -37,7 +38,9 @@ select job, avg(sal) from emp where job != 'manager' group by job having avg(sal
 -- 문제6. 1982년도에 입사한 모든 사원의 정보 조회 (이렇게 쓰는게 맞는건지..잘 모르겠다. 틀림-나는 1982년부터 입사한 사람들이 다 출력됨..ㅜㅜ)
 select * from emp where hiredate >= '1982-01-01'
 -- 답 
+-- '%(찾고자하는 시간)'에 찾고자하는 시간에 대소문자 구분함. 어떤걸로 썼느냐에 따라 결과값이 달라짐. date_format()을 검색해보면 자세히 나옴. 
 select * from emp where date_format(hiredate, '%Y') = '1982'
+select * from emp where date_format(hiredate, '%m') = '04' -- 연습
 -- 문제7. 급여가 1500 ~ 2850 사이의 범위에 속하는 사원 이름, 급여, 직책 조회
 select ename, sal, job from emp where sal >= 1500 and sal<=2850
 
