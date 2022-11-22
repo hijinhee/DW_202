@@ -1,0 +1,14 @@
+* 자주 조회하는 컬럼은 위에 배치한다.
+* 테이블에 컬럼이 많으면 좋지 않다. (조회하기 어렵다.)
+* 컬럼 데이터에 NULL이 많으면 테이블을 다시 설계해보자.
+* UPDATE -> DELETE + INSERT 의 조합이다.
+(업데이트는 쿼리가 두번 시행되므로 데이터 조회하는데 오래 걸리니 자주 사용하지 않는것이 좋다.)
+
+DML (SELECT(자원이 적게 들음), INSERT, UPDATE, DELETE)
+
+서비스 규모가 커지면,
+SELECT만 할 수 있는 SLAVE DB
+INSERT, UPDATE, DELETE만 할 수 있는 MASTER DB로 분리한다.
+
+
+
